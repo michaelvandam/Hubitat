@@ -1,6 +1,6 @@
 /**
- *  Driver for connecting to an Interlogix alarm system outfitted with the alarm system bridge device developed by Leef Automation.
- *  This code was heavily modified from the original SmartThings version written by Leef Automation.
+ *  Driver for connecting to an Interlogix Networx alarm system outfitted with the alarm system bridge device
+ *  developed by Leef Automation.
  * 
  *  Copyright 2019 R. Michael van Dam
  *
@@ -13,13 +13,13 @@
  *  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
  *  for the specific language governing permissions and limitations under the License.
  *
- *  Alarm Bridge Controller
- *
- *  History:
- *  2019-12-15 - Michael van Dam - Adapted for Habitat
+ * UPDATE HISTORY:
+ *  2019-12-15 - R. Michael van Dam - Redesigned as a driver and app for Hubitat
  *  2019-08-02 - LeeF Automation - Original SmartThings version
  * 
- *  LeeF Automation thanks CJCharles who created the Visonic alarm system integration that this device handler is evolved from
+ * CREDITS:
+ *  This code was heavily modified from LeeF Automation's SmartThings version, including dividing it into
+ *  a separate Driver and SmartApp.
  */
 
 import groovy.json.JsonSlurper
@@ -32,8 +32,6 @@ metadata
 		capability "Configuration"
 		capability "Alarm"
 		capability "Polling"
-        capability "Actuator" // RMV: for integration with Rule Machine (Custom Actions); need a capability which is included in the list in Rule Machine
-        // TODO: remove above if no longer use Rule Machine (i.e. for buttons) // Also remove the RuleMachineRules (disable first)
 
         // Alarm panel status
 		attribute "status", "string"       

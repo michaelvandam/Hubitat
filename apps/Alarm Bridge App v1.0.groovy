@@ -2,23 +2,25 @@
  *  Alarm System Interlogix
  *
  *  This Hubitat App provides an interface to an Interlogix alarm system connected via
- *  the Alarm System Bridge developed by LeeF Automation.  The original SmartThings code from
- *  LeeF Automation has been extensively rewritten for Hubitat, including dividing it into
- *  a separate Driver and SmartApp.
+ *  the Alarm System Bridge developed by LeeF Automation.
  *
  *  The following features are supported:
+ *  - Installs alarm bridge driver device
  *  - Provides Virtual Switch (momentary) devices to control standard functions (Arm Home, Arm Away, Disarm, Panic)
- *  - Supports notifications of Alarm, Panic, Arm Failure, Arm Success (Home or Away)
+ *  - Supports notifications of Alarm, Panic, Arm Success, and Disarm Success
  *  - Supports bypassing of zones
  *
  *  The following are planned for the future:
  *  - Consistent use of exception handling
- *  - Improve the SmartApp GUI to integrate more of setup all in one place (create bridge device, configure,
+ *  - Improve the SmartApp GUI to integrate more of setup all in one place (create bridge device, configuration settings,
  *      add zones, configure and add switches)
- *  - Improve the SmartApp GUI to provide more control over zones (e.g. renaming, changing type, bypassing)
+ *  - Improve the SmartApp GUI to provide more control over zones (e.g. renaming, changing type, bypassing/clearing)
  *  - Improve the SmartApp GUI to provide more functional operating interface and zone view
+ *  - Improve the SmartApp GUI to provide features like rebooting and refreshing the bridge device
+ *  - Add feature to notify of arm home or away
  *  - Integrate with TileMaster or SuperTile or etc... to streamline the setup process
  *  - Integrate better with HSM (e.g. maybe a single virtual sensor can be monitored by HSM)
+ *  - Add installation feature that cleans up various devices
  * 
  *  Copyright 2019 R. Michael van Dam
  *
@@ -31,8 +33,13 @@
  *  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
  *  for the specific language governing permissions and limitations under the License.
  *
- * VERSION HISTORY
- * Version 0.0.1 - R. Michael van Dam - Initial design and release
+ * UPDATE HISTORY:
+ *  2019-12-20 - R. Michael van Dam - Initial design and release
+ *  2019-08-02 - LeeF Automation - Original SmartThings version
+ * 
+ * CREDITS:
+ *  This code was heavily modified from LeeF Automation's SmartThings version, including dividing it into
+ *  a separate Driver and SmartApp.
  */
 
 
@@ -57,14 +64,6 @@ preferences {
     page (name: "page_remove_switches")
 }
 
-// TODO: future things to add:
-// -- input all driver preferences here
-// -- reset/reboot driver
-// -- refresh driver
-// -- bypass/clear zones
-// -- uninstall
-
-
 // ------------------------------------------------------------------------------------------------------------------------
 // APP PAGES
 // ------------------------------------------------------------------------------------------------------------------------
@@ -87,7 +86,8 @@ def page_main() {
             section("Alarm panel status") {
                 paragraph "Panel status: " + getStatusText(state.status)
             }
-            // Show bypassed zones?
+            // TODO:
+			// Show bypassed zones?
             // Show buttons for arm, disarm
             // Show alarm status (refreshed)
         }
@@ -324,6 +324,8 @@ def handleAlarmStatus(evt) {
             }
             // Notify HSM to update status
             sendLocationEvent(name: "hsmSetArm", value: "disarm")
+			// Update laststatus
+			state.laststatus = state.status
             break
         
         case "notready":
@@ -345,6 +347,8 @@ def handleAlarmStatus(evt) {
             }
             // Notify HSM to update status
             sendLocationEvent(name: "hsmSetArm", value: "disarm")
+			// Update laststatus
+			state.laststatus = state.status
             break
 
         case "armaway":
@@ -370,6 +374,8 @@ def handleAlarmStatus(evt) {
             }
             // Notify HSM to update status
             sendLocationEvent(name:"hsmSetArm", value:"armAway")
+			// Update laststatus
+			state.laststatus = state.status
             break
         
         case "armhome":
@@ -395,6 +401,8 @@ def handleAlarmStatus(evt) {
             }
             // Notify HSM to update status
             sendLocationEvent(name:"hsmSetArm", value:"armHome")
+			// Update laststatus
+			state.laststatus = state.status
             break
         
         case "exitdelay":
@@ -408,6 +416,8 @@ def handleAlarmStatus(evt) {
                 // runIn (1,....) // Need a delay since relay toggle lasts for a significant amount of time
             }
             // TODO: some kind of event to send to HSM for arming delays?
+			// Update laststatus
+			state.laststatus = state.status
             break
         
         case "alarm":
@@ -420,6 +430,8 @@ def handleAlarmStatus(evt) {
             sendNotification("Alarm: ALARMED! " + evt.getDate())
             // TODO: anything to do if "attempt_disarm" or other flags are set?
             // TODO: how to properly notify HSM?
+			// Update laststatus
+			state.laststatus = state.status
             break
 
         default:
@@ -643,6 +655,7 @@ def initialize() {
 
     // Initialize state
     state.status = getChildDevice(settings.alarm_bridge_dni).currentValue("status")
+	state.laststatus = null
     // NOTE: There is a remote possibility these could be out of sync briefly if the app
     // is initiatilzed during arming/panic/alarm state
     state.attempt_armaway = false
