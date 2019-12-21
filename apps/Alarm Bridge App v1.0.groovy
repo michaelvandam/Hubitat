@@ -302,25 +302,29 @@ private subscribeSwitchEvents()
 // EVENT HANDLERS
 // ------------------------------------------------------------------------------------------------------------------------
 
+/* Handle changes to alarm status
+   NOTE: We look for state change to report successful Disarm, ArmHome, and ArmAway. This will ensure that notification 
+   is sent, regardless whether the action was taken from Hubitat or from the alarm panel */
+// TODO: cleanup this method once implement proper handling of unexpected status and detection of Arming failures
 def handleAlarmStatus(evt) {
     //logDebug("Inside handleAlarmStatus(${evt})")
     switch (evt.value) {
         case "disarmed":
             state.status = "disarmed"
             state.alarm_active = false
-            // NOTE: we don't disable state.panic_active in case it was used during Disarm state
+            // NOTE: we don't disable state.panic_active in case it was used during Disarmed state and panic alarm is ongoing
             logDebug("'disarmed' status found (attempt_armhome=${state.attempt_armhome}, attempt_armaway=${state.attempt_armaway}, attempt_disarm=${state.attempt_disarm})")
+			if ((state.laststatus = "armhome") || (state.laststatus == "armaway") || (state.laststatus = "alarm")) {
+				// Newly disarmed
+                state.attempt_disarm = false
+                sendNotification("Alarm: DISARMED " + evt.getDate())
+			}
             if (state.attempt_armhome || state.attempt_armaway) {
                 // Arming failed?
                 //state.attempt_armhome = false
                 //state.attempt_armaway = false
                 // System does NOT report this status if open zone during arm. Need another way to detect arming failures
                 // sendNotification("Alarm: ARM FAILED " + evt.getDate()) // Find way to list open zones?
-            }
-            if (state.attempt_disarm) {
-                // Disarm successful
-                state.attempt_disarm = false
-                sendNotification("Alarm: DISARMED " + evt.getDate())
             }
             // Notify HSM to update status
             sendLocationEvent(name: "hsmSetArm", value: "disarm")
@@ -340,11 +344,11 @@ def handleAlarmStatus(evt) {
                 // System does NOT report this status if open zone during arm. Need another way to detect arming failures
                 // sendNotification("Alarm: ARM FAILED " + evt.getDate()) // Find way to list open zones?
             }
-            if (state.attempt_disarm) {
-                // Disarm success
+			if ((state.laststatus = "armhome") || (state.laststatus == "armaway") || (state.laststatus = "alarm")) {
+				// Newly disarmed
                 state.attempt_disarm = false
                 sendNotification("Alarm: DISARMED " + evt.getDate())
-            }
+			}
             // Notify HSM to update status
             sendLocationEvent(name: "hsmSetArm", value: "disarm")
 			// Update laststatus
@@ -360,7 +364,7 @@ def handleAlarmStatus(evt) {
                 state.attempt_armhome = false
                 sendNotification("Alarm: ARMED(AWAY) " + evt.getDate())
             }
-            if (state.attempt_armaway) {
+			if ((state.laststatus = "disarmed") || (state.laststatus == "notready") || (state.laststatus = "exitdelay")) {
                 // Arming success
                 state.attempt_armaway = false
                 sendNotification("Alarm: ARMED(AWAY) " + evt.getDate())
@@ -381,9 +385,9 @@ def handleAlarmStatus(evt) {
         case "armhome":
             state.status = "armhome"
             logDebug("'armhome' status found (attempt_armhome=${state.attempt_armhome}, attempt_armaway=${state.attempt_armaway}, attempt_disarm=${state.attempt_disarm})")
-            if (state.attempt_armhome) {
+			if ((state.laststatus = "disarmed") || (state.laststatus == "notready") || (state.laststatus = "exitdelay")) {
                 // Arming success
-                state.attempt_armhome = false                
+                state.attempt_home = false
                 sendNotification("Alarm: ARMED(HOME) " + evt.getDate())
             }
             if (state.attempt_armaway) {
