@@ -314,11 +314,17 @@ def handleAlarmStatus(evt) {
             state.alarm_active = false
             // NOTE: we don't disable state.panic_active in case it was used during Disarmed state and panic alarm is ongoing
             logDebug("'disarmed' status found (attempt_armhome=${state.attempt_armhome}, attempt_armaway=${state.attempt_armaway}, attempt_disarm=${state.attempt_disarm})")
-			if ((state.laststatus = "armhome") || (state.laststatus == "armaway") || (state.laststatus = "alarm")) {
-				// Newly disarmed
-                state.attempt_disarm = false
-                sendNotification("Alarm: DISARMED " + evt.getDate())
+			if ((state.laststatus == "disarmed") || (state.laststatus == "notready")) {
+				// No change in status
 			}
+			else if ((state.laststatus = "armhome") || (state.laststatus == "armaway") || (state.laststatus = "alarm")) {
+				// Newly disarmed
+				state.attempt_disarm = false
+				sendNotification("Alarm: DISARMED " + evt.getDate())
+				// Notify HSM to update status
+				sendLocationEvent(name: "hsmSetArm", value: "disarm")
+			}
+			/*
             if (state.attempt_armhome || state.attempt_armaway) {
                 // Arming failed?
                 //state.attempt_armhome = false
@@ -326,8 +332,7 @@ def handleAlarmStatus(evt) {
                 // System does NOT report this status if open zone during arm. Need another way to detect arming failures
                 // sendNotification("Alarm: ARM FAILED " + evt.getDate()) // Find way to list open zones?
             }
-            // Notify HSM to update status
-            sendLocationEvent(name: "hsmSetArm", value: "disarm")
+			*/
 			// Update laststatus
 			state.laststatus = state.status
             break
@@ -337,17 +342,24 @@ def handleAlarmStatus(evt) {
             state.alarm_active = false
             // NOTE: we don't disable state.panic_active in case it was used during Disarm state
             logDebug("'notready' status found (attempt_armhome=${state.attempt_armhome}, attempt_armaway=${state.attempt_armaway}, attempt_disarm=${state.attempt_disarm})")
-            if (state.attempt_armhome || state.attempt_armaway) {
+            /*
+			if (state.attempt_armhome || state.attempt_armaway) {
                 // Arming failed?
                 //state.attempt_armhome = false
                 //state.attempt_armaway = false
                 // System does NOT report this status if open zone during arm. Need another way to detect arming failures
                 // sendNotification("Alarm: ARM FAILED " + evt.getDate()) // Find way to list open zones?
             }
-			if ((state.laststatus = "armhome") || (state.laststatus == "armaway") || (state.laststatus = "alarm")) {
+			*/
+			if ((state.laststatus == "disarmed") || (state.laststatus == "notready")) {
+				// No change in status
+			}
+			else if ((state.laststatus = "armhome") || (state.laststatus == "armaway") || (state.laststatus = "alarm")) {
 				// Newly disarmed
-                state.attempt_disarm = false
-                sendNotification("Alarm: DISARMED " + evt.getDate())
+				state.attempt_disarm = false
+				sendNotification("Alarm: DISARMED " + evt.getDate())
+				// Notify HSM to update status
+				sendLocationEvent(name: "hsmSetArm", value: "disarm")
 			}
             // Notify HSM to update status
             sendLocationEvent(name: "hsmSetArm", value: "disarm")
@@ -364,7 +376,10 @@ def handleAlarmStatus(evt) {
                 state.attempt_armhome = false
                 sendNotification("Alarm: ARMED(AWAY) " + evt.getDate())
             }
-			if ((state.laststatus = "disarmed") || (state.laststatus == "notready") || (state.laststatus = "exitdelay")) {
+			if (state.laststatus == "armaway") {
+				// No change in status
+			}
+			else if ((state.laststatus = "disarmed") || (state.laststatus == "notready") || (state.laststatus = "exitdelay")) {
                 // Arming success
                 state.attempt_armaway = false
                 sendNotification("Alarm: ARMED(AWAY) " + evt.getDate())
@@ -385,7 +400,10 @@ def handleAlarmStatus(evt) {
         case "armhome":
             state.status = "armhome"
             logDebug("'armhome' status found (attempt_armhome=${state.attempt_armhome}, attempt_armaway=${state.attempt_armaway}, attempt_disarm=${state.attempt_disarm})")
-			if ((state.laststatus = "disarmed") || (state.laststatus == "notready") || (state.laststatus = "exitdelay")) {
+			if (state.laststatus == "armhome") {
+				// No change in status
+			}
+			else if ((state.laststatus = "disarmed") || (state.laststatus == "notready") || (state.laststatus = "exitdelay")) {
                 // Arming success
                 state.attempt_home = false
                 sendNotification("Alarm: ARMED(HOME) " + evt.getDate())
