@@ -1,5 +1,5 @@
 /**
- *  Alarm System Interlogix
+ *  Alarm Bridge App
  *
  *  This Hubitat App provides an interface to an Interlogix alarm system connected via
  *  the Alarm System Bridge developed by LeeF Automation.
@@ -33,7 +33,8 @@
  *  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
  *  for the specific language governing permissions and limitations under the License.
  *
- * UPDATE HISTORY:
+ *  VERSION 1.0.0
+ *  UPDATE HISTORY:
  *  2019-12-20 - R. Michael van Dam - Initial design and release
  *  2019-08-02 - LeeF Automation - Original SmartThings version
  * 
