@@ -1,14 +1,14 @@
 {
     "packageName": "Networx Alarm System Bridge",
     "author": "Michael van Dam",
-    "minimumHEVersion": "2.0.0",
+    "minimumHEVersion": "2.2.0",
     "dateReleased": "2021-03-06",
     "version": "1.0.0",
     "documentationLink": "https://raw.githubusercontent.com/michaelvandam/Hubitat/master/Networx-Alarm-System-Bridge/README.md",
     "communityLink": "",
     "apps": [
       {
-        "id": "",
+        "id": "7a7a2150-1e38-471e-bcb0-64f9a47ca2a8",
         "name": "Alarm Bridge App",
         "namespace": "michaelvandam",
         "alternateNames" : [
@@ -16,7 +16,7 @@
             "name": "Alarm System Interlogix",
             "namespace": "alarm"
           }
-        ]
+        ],
         "location": "https://raw.githubusercontent.com/michaelvandam/Hubitat/master/Networx-Alarm-System-Bridge/apps/Alarm%20Bridge%20App.groovy",
         "required": true,
         "oauth": false
@@ -24,7 +24,7 @@
     ],
     "drivers": [
       {
-        "id": "",
+        "id": "2ae207ce-55d7-4a9a-814e-0a61b325fd93",
         "name": "Alarm Bridge Driver",
         "namespace": "michaelvandam",
         "alternateNames" : [
@@ -32,12 +32,12 @@
             "name": "Alarm System Driver Interlogix",
             "namespace": "alarm"
           }
-        ]
+        ],
         "location": "https://raw.githubusercontent.com/michaelvandam/Hubitat/master/Networx-Alarm-System-Bridge/drivers/Alarm%20Bridge%20Driver.groovy",
         "required": true
       },
       {
-        "id": "",
+        "id": "ffb9c753-154e-40ff-b473-5e51d6a09907",
         "name": "Alarm Virtual Contact Sensor",
         "namespace": "michaelvandam",
         "alternateNames" : [
@@ -45,12 +45,12 @@
             "name": "Alarm Virtual Contact Sensor",
             "namespace": "alarm"
           }
-        ]
+        ],
         "location": "https://raw.githubusercontent.com/michaelvandam/Hubitat/master/Networx-Alarm-System-Bridge/drivers/Alarm%20Virtual%20Contact%20Sensor.groovy",
         "required": true
       },
       {
-        "id": "",
+        "id": "9b3a7e29-64a8-421f-9318-0bd567204980",
         "name": "Alarm Virtual Motion Sensor",
         "namespace": "michaelvandam",
         "alternateNames" : [
@@ -58,22 +58,22 @@
             "name": "Alarm Virtual Motion Sensor",
             "namespace": "alarm"
           }
-        ]
+        ],
         "location": "https://raw.githubusercontent.com/michaelvandam/Hubitat/master/Networx-Alarm-System-Bridge/drivers/Alarm%20Virtual%20Motion%20Sensor.groovy",
         "required": true
       },
       {
-        "id": "",
+        "id": "e4c5f076-ecd7-4dc9-b56d-7810d1a289a9",
         "name": "Alarm Virtual Smoke Detector",
+        "namespace": "michaelvandam",
         "alternateNames" : [
           {
             "name": "Alarm Virtual Smoke Detector",
             "namespace": "alarm"
           }
-        ]
-        "namespace": "michaelvandam",
+        ],
         "location": "https://raw.githubusercontent.com/michaelvandam/Hubitat/master/Networx-Alarm-System-Bridge/drivers/Alarm%20Virtual%20Smoke%20Detector.groovy",
         "required": true
-      },
+      }
     ]
   }
