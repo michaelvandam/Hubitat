@@ -5,7 +5,7 @@
     "dateReleased": "2021-03-06",
     "version": "1.0.0",
     "documentationLink": "https://raw.githubusercontent.com/michaelvandam/Hubitat/master/Networx-Alarm-System-Bridge/README.md",
-    "communityLink": "",
+    "communityLink": "https://community.hubitat.com/t/interlogix-networx-alarm-with-leef-automation-alarm-system-bridge/31927",
     "apps": [
       {
         "id": "7a7a2150-1e38-471e-bcb0-64f9a47ca2a8",

@@ -5,6 +5,7 @@
     "packages": [
       {
         "name": "Networx Alarm System Bridge",
+        "categories": ["Security"],
         "tags": ["Alarm Systems","Safety & Security"],
         "location": "https://raw.githubusercontent.com/michaelvandam/Hubitat/master/Networx-Alarm-System-Bridge/package/networkx-alarm-system-bridge-package.json",
         "description": "Alarm bridge integration for Networx/GE/Interlogix alarms"
