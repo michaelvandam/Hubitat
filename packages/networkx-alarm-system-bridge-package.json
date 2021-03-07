@@ -1,0 +1,25 @@
+{
+    "packageName": "Networx Alarm System Bridge",
+    "author": "michaelvandam",
+    "minimumHEVersion": "1.1",
+    "dateReleased": "2021-03-06",
+    "version": "1.00",
+    "documentationLink": "",
+    "communityLink": "",
+    "drivers": [
+      {
+        "id": "",
+        "name": "Alarm Bridge",
+        "namespace": "michaelvandam",
+        "location": "",
+        "required": true
+      },
+      {
+        "id": "",
+        "name": "",
+        "namespace": "michaelvandam",
+        "location": "",
+        "required": true
+      }
+    ]
+  }

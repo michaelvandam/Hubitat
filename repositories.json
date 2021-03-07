@@ -1,0 +1,13 @@
+{
+    "author": "michaelvandam",
+    "gitHubUrl": "https://github.com/michaelvandam",
+    "payPalUrl": "https://paypal.me/rmichaelvandam",
+    "packages": [
+      {
+        "name": "Networx Alarm System Bridge",
+        "tags": ["Alarm Systems","Safety & Security"],
+        "location": "https://raw.githubusercontent.com/cjcharles0/Hubitat/master/packages/alarm-bridge-package.json",
+        "description": "Alarm bridge integration for Networx/GE/Interlogix alarms"
+      }
+    ]
+  }
