@@ -2,6 +2,7 @@
 <h2>Overview</h2>
 <p> This code is used to operate the NetworX Alarm System Bridge (developed by LeeF Automation) on a Hubitat Elevate home automation hub. The bridge is a small WiFi-enabled device that allows your Interlogix NetworX alarm system to communicate with your hub. The hub code was originally written for the SmartThings hub (by LeeF Automation). Here, I've restructured the code (and added new features) to run on Hubitat. <p> This is still a work in progress and there is room for improvement, but hopefully it can help to get you up and running.
 <h2>Installation</h2>
+<p>Update 2021-03-07: I have updated to be compatible with Hubitat Package Manager (HPM) for easier installation and management.If already installed you can use the "Match" feature in HPM and then update. </p>
 <h3>Requirements</h3>
 <ul>
 <li>Networx Alarm System Bridge, with optional disarm kit
@@ -12,10 +13,12 @@
 <ul>
 <li> Set up the Interlogix Alarm System Bridge, as per instructions from LeeF Automation
 <li> Log into to you hub
-<li> Install the App: Alarm Bridge App
-<li> Install the Driver: Alarm Bridge Driver
-<li> Install the Drivers: Alarm Virtual Contact Sensor, Alarm Virtual Motion Sensor, Alarm Virtual Smoke Detector
-<li> Go to Apps | Click on "Alarm System Interlogix"
+<li> Click on Apps
+<li> Click on Hubitat Package Manager (HPM)
+<li> Click on Install
+<li> Search by keyword: Networx
+<li> Install all components (all are required)
+<li> Go to Apps | Click on "Alarm Bridge App"
 <li> Go to Configuration Page
 <li> Click "Create Bridge Device" (don't change the device network ID)
 <li> Go to Devices | Select the "Alarm System Interlogix Driver" device
